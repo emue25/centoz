@@ -163,9 +163,9 @@ wget -O /etc/openvpn/client.ovpn "https://raw.githubusercontent.com/emue25/cento
 sed -i $MYIP2 /etc/openvpn/client.ovpn;
 #PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
 useradd -g 0 -d /root/ -s /bin/bash $dname
-echo $dname:$dname"@2017" | chpasswd
+echo $dname:$dname"@2019" | chpasswd
 echo $dname > pass.txt
-echo $dname"@2017" >> pass.txt
+echo $dname"@2019" >> pass.txt
 tar cf client.tar client.ovpn pass.txt
 cp client.tar /home/vps/public_html/
 cp client.ovpn /home/vps/public_html/
@@ -209,7 +209,7 @@ chkconfig sshd on
 
 # install dropbear
 yum -y install dropbear
-echo "OPTIONS=\"-p 80 -p 109 -p 110 -p 442 -b /etc/pesan\"" > /etc/sysconfig/dropbear
+echo "OPTIONS=\"-p 109 -p 110 -p 442 -b /etc/pesan\"" > /etc/sysconfig/dropbear
 echo "/bin/false" >> /etc/shells
 echo "PIDFILE=/var/run/dropbear.pid" >> /etc/init.d/dropbear
 service dropbear restart
@@ -317,8 +317,8 @@ echo "0 */12 * * * root /bin/sh /usr/bin/reboot" > /etc/cron.d/reboot
 echo "* * * * * root /bin/sh /usr/bin/cron-dropcheck" > /etc/cron.d/dropcheck
 #echo "0 */1 * * * root killall /bin/sh" > /etc/cron.d/killak
 
-# set time GMT +7
-ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+# set time GMT +8
+ln -fs /usr/share/zoneinfo/Asia/Kuala_Lumpur /etc/localtime
 
 # finalisasi
 chown -R nginx:nginx /home/vps/public_html
