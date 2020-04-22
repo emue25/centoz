@@ -136,7 +136,7 @@ service php-fpm restart
 service nginx restart
 
 # install openvpn
-wget -O /etc/openvpn/openvpn.zip "https://github.com/emue25/centox/zhangzi/raw/openvpn-key.zip"
+wget -O /etc/openvpn/openvpn.zip "https://github.com/emue25/centoz/zhangzi/raw/openvpn-key.zip"
 cd /etc/openvpn/
 unzip openvpn.zip
 wget -O /etc/openvpn/1194.conf "https://raw.githubusercontent.com/emue25/centoz/zhangzi/1194-centos.conf"
@@ -179,7 +179,7 @@ fi
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300' /etc/rc.local
 sed -i '$ i\screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200' /etc/rc.d/rc.local
 chmod +x /usr/bin/badvpn-udpgw
-screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7200
+screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 # install mrtg
 cd /etc/snmp/
