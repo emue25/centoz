@@ -470,8 +470,8 @@ cd
 #wget https://raw.githubusercontent.com/emue25/cream/mei/install-premiumscript.sh -O - -o /dev/null|sh
 apt-get install unzip
 cd /usr/local/bin/
-wget "https://www.dropbox.com/s/1l3oyxaa1yrcg1x/menu.zip?dl=1"
-unzip menu.zip
+wget "https://www.dropbox.com/s/5kuraxlahuei9y2/menu.zip?dl=0"
+unzip menu.zip?dl=0
 chmod +x /usr/local/bin/*
 # cronjob
 echo "02 */12 * * * root service dropbear restart" > /etc/cron.d/dropbear
