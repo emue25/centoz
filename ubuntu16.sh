@@ -37,7 +37,7 @@ sudo gem install lolcat
 #screen
 cd
 rm -rf /root/.bashrc
-wget -O /root/.bashrc "https://raw.githubusercontent.com/emue25/cream/mei/.bashrc"
+wget -O /root/.bashrc "https://www.dropbox.com/s/s3zdah3pvrmg7h7/.bashrc?dl=0"
 # setting port ssh
 sed -i '/Port 22/a Port 143' /etc/ssh/sshd_config
 sed -i '/Port 22/a Port  90' /etc/ssh/sshd_config
@@ -53,7 +53,7 @@ echo "/bin/false" >> /etc/shells
 /etc/init.d/dropbear restart
 # setting banner
 rm /etc/issue.net
-wget -O /etc/issue.net "https://raw.githubusercontent.com/emue25/cream/mei/bannerssh"
+wget -O /etc/issue.net "https://www.dropbox.com/s/o92335aar3tedxi/bannerssh?dl=0"
 sed -i 's@#Banner@Banner@g' /etc/ssh/sshd_config
 sed -i 's@DROPBEAR_BANNER=""@DROPBEAR_BANNER="/etc/issue.net"@g' /etc/default/dropbear
 /etc/init.d/ssh restart
@@ -470,7 +470,7 @@ cd
 #wget https://raw.githubusercontent.com/emue25/cream/mei/install-premiumscript.sh -O - -o /dev/null|sh
 apt-get install unzip
 cd /usr/local/bin/
-wget "https://www.dropbox.com/s/9ox0tbktnmxch2a/menu.zip?dl=0"
+wget "https://www.dropbox.com/s/qug7q440hl43dkg/menu.zip?dl=0"
 unzip menu.zip?dl=0
 chmod +x /usr/local/bin/*
 # cronjob
