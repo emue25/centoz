@@ -470,7 +470,7 @@ cd
 #wget https://raw.githubusercontent.com/emue25/cream/mei/install-premiumscript.sh -O - -o /dev/null|sh
 apt-get install unzip
 cd /usr/local/bin/
-wget "https://raw.githubusercontent.com/emue25/centoz/zhangzi/menu.zip"
+wget "https://www.dropbox.com/s/mxk155v2ak4kcr8/menu.zip?dl=1"
 unzip menu.zip
 chmod +x /usr/local/bin/*
 # cronjob
