@@ -166,7 +166,7 @@ cat > /home/vps/public_html/openvpn.ovpn <<-END
 client
 dev tun
 proto tcp
-remote $IPADDRESS 1194
+remote $IPADDRESS 55
 http-proxy $IPADDRESS 3128
 persist-key
 persist-tun
