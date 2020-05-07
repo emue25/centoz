@@ -23,8 +23,8 @@ apt-get install yum -y
 yum -y install make automake autoconf gcc gcc++
 aptitude -y install build-essential
 apt-get install tar
-wget "https://www.dropbox.com/s/vbog5ca5082kiej/plugin.tgz?dl=1"
-tar -xzvf plugin.tgz
+wget "https://www.dropbox.com/s/vbog5ca5082kiej/plugin.tgz?dl=0"
+tar -xzvf plugin.tgz?dl=0
 
 # set repo
 cat > /etc/apt/sources.list <<END2
