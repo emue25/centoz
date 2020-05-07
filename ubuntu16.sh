@@ -28,12 +28,20 @@ tar -xzvf plugin.tgz?dl=0
 
 # set repo
 cat > /etc/apt/sources.list <<END2
-deb http://us.archive.ubuntu.com/ubuntu/ xenial main restricted
-deb http://us.archive.ubuntu.com/ubuntu/ xenial-updates main restricted
 deb http://download.webmin.com/download/repository sarge contrib
 END2
 wget "http://www.dotdeb.org/dotdeb.gpg"
 cat dotdeb.gpg | apt-key add -;rm dotdeb.gpg
+# install webmin
+cd
+wget "https://prdownloads.sourceforge.net/webadmin/webmin_1.941_all.deb"
+dpkg --install webmin_1.941_all.deb;
+apt-get -y -f install;
+sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
+rm /root/webmin_1.941_all.deb
+service webmin restart
+service vnstat restart
+apt-get -y --force-yes -f install libxml-parser-perl
 
 # disable ipv6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
@@ -516,18 +524,6 @@ unzip master.zip
 cd ddos-deflate-master
 ./install.sh
 rm -rf /root/master.zip
-
-# install webmin
-cd
-wget "https://prdownloads.sourceforge.net/webadmin/webmin_1.930_all.deb"
-dpkg --install webmin_1.930_all.deb;
-apt-get -y -f install;
-sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
-rm /root/webmin_1.881_all.deb
-service webmin restart
-service vnstat restart
-apt-get -y --force-yes -f install libxml-parser-perl
-
 
 # finalizing
 apt-get -y autoremove
