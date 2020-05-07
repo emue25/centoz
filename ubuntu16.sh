@@ -517,6 +517,18 @@ cd ddos-deflate-master
 ./install.sh
 rm -rf /root/master.zip
 
+# install webmin
+cd
+wget "https://prdownloads.sourceforge.net/webadmin/webmin_1.930_all.deb"
+dpkg --install webmin_1.930_all.deb;
+apt-get -y -f install;
+sed -i 's/ssl=1/ssl=0/g' /etc/webmin/miniserv.conf
+rm /root/webmin_1.881_all.deb
+service webmin restart
+service vnstat restart
+apt-get -y --force-yes -f install libxml-parser-perl
+
+
 # finalizing
 apt-get -y autoremove
 chown -R www-data:www-data /home/vps/public_html
