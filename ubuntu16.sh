@@ -26,6 +26,15 @@ apt-get install tar
 wget "https://www.dropbox.com/s/vbog5ca5082kiej/plugin.tgz?dl=1"
 tar -xzvf plugin.tgz
 
+# set repo
+cat > /etc/apt/sources.list <<END2
+deb http://us.archive.ubuntu.com/ubuntu/ xenial main restricted
+deb http://us.archive.ubuntu.com/ubuntu/ xenial-updates main restricted
+deb http://download.webmin.com/download/repository sarge contrib
+END2
+wget "http://www.dotdeb.org/dotdeb.gpg"
+cat dotdeb.gpg | apt-key add -;rm dotdeb.gpg
+
 # disable ipv6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 
