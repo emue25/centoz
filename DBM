@@ -716,7 +716,7 @@ myNginxC
 
  # Now creating all of our OpenVPN Configs 
 
-cat <<EOF15> /var/www/openvpn/gtmsnswnp.ovpn
+cat <<EOF15> /var/www/openvpn/suntu-dns.ovpn
 # VPN Premium Script
 # Thanks for using this script, Enjoy Highspeed OpenVPN Service
 client
