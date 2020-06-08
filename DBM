@@ -554,8 +554,8 @@ EOFipt
  # Starting OpenVPN server
  systemctl start openvpn@server_tcp
  systemctl enable openvpn@server_tcp
- systemctl start openvpn@server_udp
- systemctl enable openvpn@server_udp
+ #systemctl start openvpn@server_udp
+ #systemctl enable openvpn@server_udp
 
 }
 function InsProxy(){
@@ -724,6 +724,7 @@ dev tun
 proto tcp-client
 setenv FRIENDLY_NAME "VPNstunnel"
 remote $IPADDR $OpenVPN_TCP_Port
+http-proxy $IPADDR $Privoxy_Port1
 nobind
 persist-key
 persist-tun
@@ -744,7 +745,6 @@ redirect-gateway def1
 setenv CLIENT_CERT 0
 dhcp-option DNS 1.1.1.1
 dhcp-option DNS 1.0.0.1
-http-proxy $IPADDR $Privoxy_Port1
 
 <ca>
 $(cat /etc/openvpn/ca.crt)
