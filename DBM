@@ -13,7 +13,7 @@ SSH_Port1='22'
 SSH_Port2='143'
 
 # Your SSH Banner
-SSH_Banner='https://raw.githubusercontent.com/emue25/cream/mei/bannerssh'
+bannerssh='https://raw.githubusercontent.com/emue25/cream/mei/bannerssh'
 
 # Dropbear Ports
 Dropbear_Port1='445'
@@ -143,7 +143,7 @@ MySSHConfig
 
  # Download our SSH Banner
  rm -f /etc/banner
- wget -qO /etc/banner "$SSH_Banner"
+ wget -qO /etc/banner "$bannerssh"
  dos2unix -q /etc/banner
 
  # My workaround code to remove `BAD Password error` from passwd command, it will fix password-related error on their ssh accounts.
@@ -871,7 +871,7 @@ cd ~
 }
 
 function ScriptMessage(){
- echo -e " (｡◕‿◕｡) $MyScriptName VPNstunnel"
+ echo -e " (｡◕‿◕｡) $MyScriptName MANTUL BOSKU"
  echo -e ""
  echo -e " Script Modif by Mambang-Kimcil"
  echo -e ""
