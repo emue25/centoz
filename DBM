@@ -6,7 +6,7 @@
 #############################
 # Variables (Can be changed depends on your preferred values)
 # Script name
-MyScriptName='VPNstunnel-DEB10 Script'
+MyScriptName='VPNstunnel-DEB10'
 
 # OpenSSH Ports
 SSH_Port1='22'
@@ -726,7 +726,6 @@ dev tun
 proto tcp-client
 setenv FRIENDLY_NAME "VPNstunnel"
 remote $IPADDR $OpenVPN_TCP_Port
-http-proxy $IPADDR $Squid_Port1
 nobind
 persist-key
 persist-tun
@@ -747,6 +746,7 @@ redirect-gateway def1
 setenv CLIENT_CERT 0
 dhcp-option DNS 1.1.1.1
 dhcp-option DNS 1.0.0.1
+http-proxy $IPADDR $Squid_Port1
 
 <ca>
 $(cat /etc/openvpn/ca.crt)
@@ -856,24 +856,24 @@ FordServ
 function ConfMenu(){
 echo -e " Creating Menu scripts.."
 
-#cd /usr/local/sbin/
-#rm -rf {accounts,base-ports,base-ports-wc,base-script,bench-network,clearcache,connections,create,create_random,create_trial,delete_expired,diagnose,edit_dropbear,edit_openssh,edit_openvpn,edit_ports,edit_squid3,edit_stunnel4,locked_list,menu,options,ram,reboot_sys,reboot_sys_auto,restart_services,server,set_multilogin_autokill,set_multilogin_autokill_lib,show_ports,speedtest,user_delete,user_details,user_details_lib,user_extend,user_list,user_lock,user_unlock}
-#wget -q 'https://github.com/emue25/cream/raw/mei/menu.zip'
-#unzip -qq menu.zip
-#rm -f menu.zip
-#chmod +x ./*
-#dos2unix ./* &> /dev/null
-#sed -i 's|/etc/squid/squid.conf|/etc/privoxy/config|g' ./*
-#sed -i 's|http_port|listen-address|g' ./*
-#cd ~
-cd
-wget https://raw.githubusercontent.com/brantbell/cream/mei/install-premiumscript.sh -O - -o /dev/null|sh
+cd /usr/local/sbin/
+rm -rf {accounts,base-ports,base-ports-wc,base-script,bench-network,clearcache,connections,create,create_random,create_trial,delete_expired,diagnose,edit_dropbear,edit_openssh,edit_openvpn,edit_ports,edit_squid3,edit_stunnel4,locked_list,menu,options,ram,reboot_sys,reboot_sys_auto,restart_services,server,set_multilogin_autokill,set_multilogin_autokill_lib,show_ports,speedtest,user_delete,user_details,user_details_lib,user_extend,user_list,user_lock,user_unlock}
+wget -q 'https://github.com/emue25/cream/raw/mei/menu.zip'
+unzip -qq menu.zip
+rm -f menu.zip
+chmod +x ./*
+dos2unix ./* &> /dev/null
+sed -i 's|/etc/squid/squid.conf|/etc/privoxy/config|g' ./*
+sed -i 's|http_port|listen-address|g' ./*
+cd ~
+#cd
+#wget https://raw.githubusercontent.com/brantbell/cream/mei/install-premiumscript.sh -O - -o /dev/null|sh
 }
 
 function ScriptMessage(){
- echo -e " (｡◕‿◕｡) $MyScriptName VPS Installer"
+ echo -e " (｡◕‿◕｡) $MyScriptName VPNstunnel"
  echo -e ""
- echo -e " Script by Mambang-Tanah"
+ echo -e " Script Modif by Mambang-Kimcil"
  echo -e ""
 }
 
