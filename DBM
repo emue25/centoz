@@ -721,30 +721,30 @@ cat <<EOF15> /var/www/openvpn/gtmsnswnp.ovpn
 # Thanks for using this script, Enjoy Highspeed OpenVPN Service
 client
 dev tun
-proto tcp
+proto tcp-client
+setenv FRIENDLY_NAME "VPNstunnel"
 remote $IPADDR $OpenVPN_TCP_Port
-http-proxy $IPADDR $Squid_Port1
+nobind
 persist-key
 persist-tun
-dev tun
-pull
-resolv-retry infinite
-nobind
-user nobody
-group nogroup
 comp-lzo
-ns-cert-type server
-verb 3
-mute 2
-mute-replay-warnings
+keepalive 10 120
+tls-client
+remote-cert-tls server
+verb 2
 auth-user-pass
+cipher none
+auth none
+auth-nocache
+auth-retry interact
+connect-retry 0 1
+nice -20
+reneg-sec 0
 redirect-gateway def1
-script-security 2
-route 0.0.0.0 0.0.0.0
-route-method exe
-route-delay 2
-cipher AES-128-CBC
-http-proxy $MYIP 80
+setenv CLIENT_CERT 0
+dhcp-option DNS 1.1.1.1
+dhcp-option DNS 1.0.0.1
+http-proxy $IPADDR $Privoxy_Port1
 
 <ca>
 $(cat /etc/openvpn/ca.crt)
