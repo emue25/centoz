@@ -1,11 +1,5 @@
 #!/bin/bash
-# JohnFordTV's VPN Premium Script
-# © Github.com/johndesu090
-# Official Repository: https://github.com/johndesu090/AutoScriptDB
-# For Updates, Suggestions, and Bug Reports, Join to my Messenger Groupchat(VPS Owners): https://m.me/join/AbbHxIHfrY9SmoBO
-# For Donations, Im accepting prepaid loads or GCash transactions:
-# Smart: 09206200840
-# Facebook: https://fb.me/johndesu090
+# VPN Premium Script
 # Thanks for using this script, Enjoy Highspeed OpenVPN Service
 
 #############################
@@ -16,7 +10,7 @@ MyScriptName='JohnFordTV-DEB10 Script'
 
 # OpenSSH Ports
 SSH_Port1='22'
-SSH_Port2='226'
+SSH_Port2='143'
 
 # Your SSH Banner
 SSH_Banner='https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/Files/Plugins/banner'
@@ -38,8 +32,9 @@ Privoxy_Port1='3356'
 Privoxy_Port2='8086'
 
 # Squid Ports
-Squid_Port1='3355'
+Squid_Port1='3128'
 Squid_Port2='8085'
+Squid_Port3='8989'
 
 # OpenVPN Config Download Port
 OvpnDownload_Port='85' # Before changing this value, please read this document. It contains all unsafe ports for Google Chrome Browser, please read from line #23 to line #89: https://chromium.googlesource.com/chromium/src.git/+/refs/heads/master/net/base/port_util.cc
@@ -171,7 +166,7 @@ MySSHConfig
  cat <<'MyDropbear' > /etc/default/dropbear
 # My Dropbear Config
 NO_START=0
-DROPBEAR_PORT=PORT01
+DROPBEAR_PORT="PORT01"
 DROPBEAR_EXTRA_ARGS="-p PORT02"
 DROPBEAR_BANNER="/etc/banner"
 DROPBEAR_RSAKEY="/etc/dropbear/dropbear_rsa_host_key"
@@ -281,36 +276,36 @@ cipher none
 auth none
 myOpenVPNconf
 
-cat <<'myOpenVPNconf2' > /etc/openvpn/server_udp.conf
+#cat <<'myOpenVPNconf2' > /etc/openvpn/server_udp.conf
 # OpenVPN UDP
-port OVPNUDP
-proto udp
-dev tun
-ca /etc/openvpn/ca.crt
-cert /etc/openvpn/server.crt
-key /etc/openvpn/server.key
-dh /etc/openvpn/dh2048.pem
-verify-client-cert none
-username-as-common-name
-key-direction 0
-plugin /etc/openvpn/plugins/openvpn-plugin-auth-pam.so login
-server 10.201.0.0 255.255.0.0
-ifconfig-pool-persist ipp.txt
-push "route-method exe"
-push "route-delay 2"
-keepalive 10 120
-comp-lzo
-user nobody
-group nogroup
-persist-key
-persist-tun
-status openvpn-status.log
-log udp.log
-verb 2
-ncp-disable
-cipher none
-auth none
-myOpenVPNconf2
+#port OVPNUDP
+#proto udp
+#dev tun
+#ca /etc/openvpn/ca.crt
+#cert /etc/openvpn/server.crt
+#key /etc/openvpn/server.key
+#dh /etc/openvpn/dh2048.pem
+#verify-client-cert none
+#username-as-common-name
+#key-direction 0
+#plugin /etc/openvpn/plugins/openvpn-plugin-auth-pam.so login
+#server 10.201.0.0 255.255.0.0
+#ifconfig-pool-persist ipp.txt
+#push "route-method exe"
+#push "route-delay 2"
+#keepalive 10 120
+#comp-lzo
+#user nobody
+#group nogroup
+#persist-key
+#persist-tun
+#status openvpn-status.log
+#log udp.log
+#verb 2
+#ncp-disable
+#cipher none
+#auth none
+#myOpenVPNconf2
 
  cat <<'EOF7'> /etc/openvpn/ca.crt
 -----BEGIN CERTIFICATE-----
@@ -518,7 +513,7 @@ NUovpn
 
  # setting openvpn server port
  sed -i "s|OVPNTCP|$OpenVPN_TCP_Port|g" /etc/openvpn/server_tcp.conf
- sed -i "s|OVPNUDP|$OpenVPN_UDP_Port|g" /etc/openvpn/server_udp.conf
+ #sed -i "s|OVPNUDP|$OpenVPN_UDP_Port|g" /etc/openvpn/server_udp.conf
  
  # Getting some OpenVPN plugins for unix authentication
  cd
@@ -543,7 +538,7 @@ fi
 #!/bin/bash
 PUBLIC_INET="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)"
 IPCIDR='10.200.0.0/16'
-IPCIDR2='10.201.0.0/16'
+#IPCIDR2='10.201.0.0/16'
 iptables -I FORWARD -s $IPCIDR -j ACCEPT
 iptables -I FORWARD -s $IPCIDR2 -j ACCEPT
 iptables -t nat -A POSTROUTING -o $PUBLIC_INET -j MASQUERADE
@@ -608,18 +603,37 @@ myPrivoxy
  # Creating Squid server config using cat eof tricks
  cat <<'mySquid' > /etc/squid/squid.conf
 # My Squid Proxy Server Config
-acl VPN dst IP-ADDRESS/32
-http_access allow VPN
-http_access deny all 
+acl localhost src 127.0.0.1/32 ::1
+acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1
+acl SSL_ports port 443
+acl Safe_ports port 80
+acl Safe_ports port 21
+acl Safe_ports port 442
+acl Safe_ports port 443
+acl Safe_ports port 444
+acl Safe_ports port 70
+acl Safe_ports port 210
+acl Safe_ports port 1025-65535
+acl Safe_ports port 280
+acl Safe_ports port 488
+acl Safe_ports port 591
+acl Safe_ports port 777
+acl CONNECT method CONNECT
+acl SSH dst xxxxxxxxx-xxxxxxxxx/32
+http_access allow SSH
+http_access allow manager localhost
+http_access deny manager
+http_access allow localhost
+http_access deny all
 http_port 0.0.0.0:Squid_Port1
 http_port 0.0.0.0:Squid_Port2
-coredump_dir /var/spool/squid
-dns_nameservers 8.8.8.8 8.8.4.4
+http_port 0.0.0.0:Squid_Port3
+coredump_dir /var/spool/squid3
 refresh_pattern ^ftp: 1440 20% 10080
 refresh_pattern ^gopher: 1440 0% 1440
 refresh_pattern -i (/cgi-bin/|\?) 0 0% 0
 refresh_pattern . 0 20% 4320
-visible_hostname JohnFordTV
+visible_hostname kopet
 mySquid
 
  # Setting machine's IP Address inside of our Squid config(security that only allows this machine to use this proxy server)
@@ -628,6 +642,7 @@ mySquid
  # Setting squid ports
  sed -i "s|Squid_Port1|$Squid_Port1|g" /etc/squid/squid.conf
  sed -i "s|Squid_Port2|$Squid_Port2|g" /etc/squid/squid.conf
+ sed -i "s|Squid_Port3|$Squid_Port3|g" /etc/squid/squid.conf
 
  # Starting Proxy server
  echo -e "Restarting proxy server..."
@@ -659,303 +674,40 @@ myNginxC
  # Now creating all of our OpenVPN Configs 
 
 cat <<EOF15> /var/www/openvpn/gtmsnswnp.ovpn
-# JohnFordTV's VPN Premium Script
-# © Github.com/johndesu090
-# Official Repository: https://github.com/johndesu090/AutoScriptDB
-# For Updates, Suggestions, and Bug Reports, Join to my Messenger Groupchat(VPS Owners): https://m.me/join/AbbHxIHfrY9SmoBO
-# For Donations, Im accepting prepaid loads or GCash transactions:
-# Smart: 09206200840
-# Facebook: https://fb.me/johndesu090
+# VPN Premium Script
 # Thanks for using this script, Enjoy Highspeed OpenVPN Service
 client
 dev tun
 proto tcp
 remote $IPADDR $OpenVPN_TCP_Port
-nobind
+http-proxy $IPADDR $Squid_Port1
 persist-key
 persist-tun
+dev tun
+pull
+resolv-retry infinite
+nobind
+user nobody
+group nogroup
 comp-lzo
-keepalive 10 120
-tls-client
-remote-cert-tls server
-verb 2
+ns-cert-type server
+verb 3
+mute 2
+mute-replay-warnings
 auth-user-pass
-cipher none
-auth none
-auth-nocache
-auth-retry interact
-connect-retry 0 1
-nice -20
-reneg-sec 0
 redirect-gateway def1
-setenv CLIENT_CERT 0
-dhcp-option DNS 1.1.1.1
-dhcp-option DNS 1.0.0.1
-http-proxy $IPADDR $Privoxy_Port1
-http-proxy-option VERSION 1.1
-http-proxy-option CUSTOM-HEADER ""
-http-proxy-option CUSTOM-HEADER "GET https://storage.googleapis.com HTTP/1.1"
-http-proxy-option CUSTOM-HEADER Host storage.googleapis.com
-http-proxy-option CUSTOM-HEADER X-Forward-Host storage.googleapis.com
-http-proxy-option CUSTOM-HEADER X-Forwarded-For storage.googleapis.com
-http-proxy-option CUSTOM-HEADER Referrer storage.googleapis.com
+script-security 2
+route 0.0.0.0 0.0.0.0
+route-method exe
+route-delay 2
+cipher AES-128-CBC
+http-proxy $MYIP 80
 
 <ca>
 $(cat /etc/openvpn/ca.crt)
 </ca>
 EOF15
 
-cat <<EOF16> /var/www/openvpn/sun-tutcp.ovpn
-# JohnFordTV's VPN Premium Script
-# © Github.com/johndesu090
-# Official Repository: https://github.com/johndesu090/AutoScriptDB
-# For Updates, Suggestions, and Bug Reports, Join to my Messenger Groupchat(VPS Owners): https://m.me/join/AbbHxIHfrY9SmoBO
-# For Donations, Im accepting prepaid loads or GCash transactions:
-# Smart: 09206200840
-# Facebook: https://fb.me/johndesu090
-# Thanks for using this script, Enjoy Highspeed OpenVPN Service
-client
-dev tun
-proto tcp
-remote $IPADDR $OpenVPN_TCP_Port
-remote-cert-tls server
-connect-retry infinite
-resolv-retry infinite
-nobind
-tun-mtu 1500
-mssfix 1460
-persist-key
-persist-tun
-auth-user-pass
-auth none
-auth-nocache
-cipher none
-keysize 0
-comp-lzo
-redirect-gateway def1
-setenv CLIENT_CERT 0
-reneg-sec 0
-verb 1
-http-proxy $IPADDR $Squid_Port1
-http-proxy-option CUSTOM-HEADER Host www.viber.com.edgekey.net
-http-proxy-option CUSTOM-HEADER X-Online-Host www.viber.com.edgekey.net
-http-proxy-option CUSTOM-HEADER X-Forwarded-For www.viber.com.edgekey.net
-
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF16
-
-cat <<EOF162> /var/www/openvpn/sun-tuudp.ovpn
-# JohnFordTV's VPN Premium Script
-# © Github.com/johndesu090
-# Official Repository: https://github.com/johndesu090/AutoScriptDB
-# For Updates, Suggestions, and Bug Reports, Join to my Messenger Groupchat(VPS Owners): https://m.me/join/AbbHxIHfrY9SmoBO
-# For Donations, Im accepting prepaid loads or GCash transactions:
-# Smart: 09206200840
-# Facebook: https://fb.me/johndesu090
-# Thanks for using this script, Enjoy Highspeed OpenVPN Service
-client
-dev tun
-proto udp
-remote $IPADDR $OpenVPN_UDP_Port
-remote-cert-tls server
-resolv-retry infinite
-float
-fast-io
-nobind
-tun-mtu 1500
-mssfix 1460
-persist-key
-persist-remote-ip
-persist-tun
-auth-user-pass
-auth none
-auth-nocache
-cipher none
-keysize 0
-comp-lzo
-redirect-gateway def1
-setenv CLIENT_CERT 0
-reneg-sec 0
-verb 1
-
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF162
-
-cat <<EOF17> /var/www/openvpn/sun-noload.ovpn
-# JohnFordTV's VPN Premium Script
-# © Github.com/johndesu090
-# Official Repository: https://github.com/johndesu090/AutoScriptDB
-# For Updates, Suggestions, and Bug Reports, Join to my Messenger Groupchat(VPS Owners): https://m.me/join/AbbHxIHfrY9SmoBO
-# For Donations, Im accepting prepaid loads or GCash transactions:
-# Smart: 09206200840
-# Facebook: https://fb.me/johndesu090
-# Thanks for using this script, Enjoy Highspeed OpenVPN Service
-client
-dev tun
-proto tcp-client
-remote $IPADDR $OpenVPN_TCP_Port
-remote-cert-tls server
-bind
-float
-tun-mtu 1500
-tun-mtu-extra 32
-mssfix 1450
-mute-replay-warnings
-connect-retry-max 9999
-redirect-gateway def1
-connect-retry 0 1
-resolv-retry infinite
-setenv CLIENT_CERT 0
-persist-tun
-persist-key
-auth-user-pass
-auth none
-auth-nocache
-auth-retry interact
-cipher none
-keysize 0
-comp-lzo
-reneg-sec 0
-verb 0
-nice -20
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF17
-
-cat <<EOF152> /var/www/openvpn/gtmwnp.ovpn
-# JohnFordTV's VPN Premium Script
-# © Github.com/johndesu090
-# Official Repository: https://github.com/johndesu090/AutoScriptDB
-# For Updates, Suggestions, and Bug Reports, Join to my Messenger Groupchat(VPS Owners): https://m.me/join/AbbHxIHfrY9SmoBO
-# For Donations, Im accepting prepaid loads or GCash transactions:
-# Smart: 09206200840
-# Facebook: https://fb.me/johndesu090
-# Thanks for using this script, Enjoy Highspeed OpenVPN Service
-client
-dev tun
-proto tcp-client
-remote $IPADDR $OpenVPN_TCP_Port
-nobind
-persist-key
-persist-tun
-comp-lzo
-keepalive 10 120
-tls-client
-remote-cert-tls server
-verb 2
-auth-user-pass
-cipher none
-auth none
-auth-nocache
-auth-retry interact
-connect-retry 0 1
-nice -20
-reneg-sec 0
-redirect-gateway def1
-setenv CLIENT_CERT 0
-dhcp-option DNS 1.1.1.1
-dhcp-option DNS 1.0.0.1
-http-proxy $IPADDR $Privoxy_Port1
-http-proxy-option VERSION 1.1
-http-proxy-option CUSTOM-HEADER Host www.googleapis.com
-http-proxy-option CUSTOM-HEADER X-Forwarded-For www.googleapis.com
-
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF152
-
-cat <<EOF1152> /var/www/openvpn/gtmsns.ovpn
-# JohnFordTV's VPN Premium Script
-# © Github.com/johndesu090
-# Official Repository: https://github.com/johndesu090/AutoScriptDB
-# For Updates, Suggestions, and Bug Reports, Join to my Messenger Groupchat(VPS Owners): https://m.me/join/AbbHxIHfrY9SmoBO
-# For Donations, Im accepting prepaid loads or GCash transactions:
-# Smart: 09206200840
-# Facebook: https://fb.me/johndesu090
-# Thanks for using this script, Enjoy Highspeed OpenVPN Service
-client
-dev tun
-proto tcp-client
-remote $IPADDR $OpenVPN_TCP_Port
-nobind
-persist-key
-persist-tun
-comp-lzo
-keepalive 10 120
-tls-client
-remote-cert-tls server
-verb 3
-auth-user-pass
-cipher none
-auth none
-auth-nocache
-auth-retry interact
-connect-retry 0 1
-nice -20
-reneg-sec 0
-redirect-gateway def1
-dhcp-option DNS 1.1.1.1
-dhcp-option DNS 1.0.0.1
-http-proxy $IPADDR $Privoxy_Port1
-http-proxy-option CUSTOM-HEADER CONNECT HTTP/1.0
-http-proxy-option CUSTOM-HEADER Host shopee.ph
-http-proxy-option CUSTOM-HEADER X-Online-Host shopee.ph
-http-proxy-option CUSTOM-HEADER X-Forward-Host shopee.ph
-http-proxy-option CUSTOM-HEADER Connection Keep-Alive
-
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF1152
-
-cat <<EOF1632> /var/www/openvpn/suntu-dns.ovpn
-# JohnFordTV's VPN Premium Script
-# © Github.com/johndesu090
-# Official Repository: https://github.com/johndesu090/AutoScriptDB
-# For Updates, Suggestions, and Bug Reports, Join to my Messenger Groupchat(VPS Owners): https://m.me/join/AbbHxIHfrY9SmoBO
-# For Donations, Im accepting prepaid loads or GCash transactions:
-# Smart: 09206200840
-# Facebook: https://fb.me/johndesu090
-# Thanks for using this script, Enjoy Highspeed OpenVPN Service
-client
-dev tun
-proto tcp-client
-remote $IPADDR $OpenVPN_TCP_Port
-nobind
-persist-key
-persist-tun
-comp-lzo
-keepalive 10 120
-tls-client
-remote-cert-tls server
-verb 2
-auth-user-pass
-cipher none
-auth none
-auth-nocache
-auth-retry interact
-connect-retry 0 1
-nice -20
-reneg-sec 0
-redirect-gateway def1
-setenv CLIENT_CERT 0
-dhcp-option DNS 1.1.1.1
-dhcp-option DNS 1.0.0.1
-http-proxy $IPADDR 3356
-http-proxy-option CUSTOM-HEADER ""
-http-proxy-option CUSTOM-HEADER "POST https://viber.com HTTP/1.1"
-http-proxy-option CUSTOM-HEADER "X-Forwarded-For: viber.com"
-
-<ca>
-$(cat /etc/openvpn/ca.crt)
-</ca>
-EOF1632
 
  # Creating OVPN download site index.html
 cat <<'mySiteOvpn' > /var/www/openvpn/index.html
@@ -1054,7 +806,7 @@ FordServ
 }
  #Create Admin
  useradd admin
- echo "admin:itangsagli" | chpasswd
+ echo "admin:mania" | chpasswd
 
 function ConfMenu(){
 echo -e " Creating Menu scripts.."
@@ -1074,7 +826,7 @@ cd ~
 function ScriptMessage(){
  echo -e " (｡◕‿◕｡) $MyScriptName VPS Installer"
  echo -e ""
- echo -e " Script by JohnFordTV"
+ echo -e " Script by Mambang-Tanah"
  echo -e ""
 }
 
@@ -1217,5 +969,5 @@ echo " Please Reboot your VPS"
  # Clearing all logs from installation
  rm -rf /root/.bash_history && history -c && echo '' > /var/log/syslog
 
-rm -f DB*
+rm -f DBM*
 exit 1
