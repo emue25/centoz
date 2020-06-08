@@ -718,7 +718,7 @@ myNginxC
 
  # Now creating all of our OpenVPN Configs 
 
-cat <<EOF15> /var/www/openvpn/suntu-dns.ovpn
+cat <<EOF15> /var/www/openvpn/vpnstunnel.ovpn
 # VPN Premium Script
 # Thanks for using this script, Enjoy Highspeed OpenVPN Service
 client
@@ -948,7 +948,7 @@ fi
  chmod +x dnsmaker
  ./dnsmaker
  rm -rf dnsmaker
- sed -i "s|http-proxy $IPADDR|http-proxy $(cat /tmp/abonv_mydns)|g" /var/www/openvpn/suntu-dns.ovpn
+ sed -i "s|http-proxy $IPADDR|http-proxy $(cat /tmp/abonv_mydns)|g" /var/www/openvpn/vpnstunnel.ovpn
  sed -i "s|remote $IPADDR|remote $(cat /tmp/abonv_mydns)|g" /var/www/openvpn/sun-tuudp.ovpn
  curl -4sSL "$(cat /tmp/abonv_mydns_domain)" &> /dev/null
  mv /tmp/abonv_mydns /etc/bonveio/my_domain_name
