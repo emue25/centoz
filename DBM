@@ -258,10 +258,12 @@ verify-client-cert none
 username-as-common-name
 key-direction 0
 plugin /etc/openvpn/plugins/openvpn-plugin-auth-pam.so login
-server 10.200.0.0 255.255.0.0
+server 10.201.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt
 push "route-method exe"
 push "route-delay 2"
+socket-flags TCP_NODELAY
+push "socket-flags TCP_NODELAY"
 keepalive 10 120
 comp-lzo
 user nobody
@@ -270,7 +272,7 @@ persist-key
 persist-tun
 status openvpn-status.log
 log tcp.log
-verb 2
+verb 3
 ncp-disable
 cipher none
 auth none
@@ -517,7 +519,7 @@ NUovpn
  
  # Getting some OpenVPN plugins for unix authentication
  cd
- wget https://github.com/johndesu090/AutoScriptDB/raw/master/Files/Plugins/plugin.tgz
+ wget https://raw.githubusercontent.com/emue25/VPSauto/master/tool/plugin.tgz
  tar -xzvf /root/plugin.tgz -C /etc/openvpn/
  rm -f plugin.tgz
  
@@ -537,7 +539,7 @@ fi
  cat <<'EOFipt' > /etc/openvpn/openvpn.bash
 #!/bin/bash
 PUBLIC_INET="$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)"
-IPCIDR='10.200.0.0/16'
+IPCIDR='10.201.0.0/16'
 #IPCIDR2='10.201.0.0/16'
 iptables -I FORWARD -s $IPCIDR -j ACCEPT
 iptables -I FORWARD -s $IPCIDR2 -j ACCEPT
@@ -676,7 +678,7 @@ refresh_pattern ^ftp: 1440 20% 10080
 refresh_pattern ^gopher: 1440 0% 1440
 refresh_pattern -i (/cgi-bin/|\?) 0 0% 0
 refresh_pattern . 0 20% 4320
-visible_hostname JohnFordTV
+visible_hostname Johnkopet
 mySquid
 
  # Setting machine's IP Address inside of our Squid config(security that only allows this machine to use this proxy server)
@@ -724,7 +726,7 @@ dev tun
 proto tcp-client
 setenv FRIENDLY_NAME "VPNstunnel"
 remote $IPADDR $OpenVPN_TCP_Port
-http-proxy $IPADDR $Privoxy_Port1
+http-proxy $IPADDR $Squid_Port1
 nobind
 persist-key
 persist-tun
